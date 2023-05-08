@@ -3,32 +3,15 @@ OBJECT Codeunit 50204 JsonParse
   OBJECT-PROPERTIES
   {
     Date=05/08/23;
-    Time=10:52:54 PM;
+    Time=11:32:49 PM;
     Modified=Yes;
     Version List=;
   }
   PROPERTIES
   {
     OnRun=BEGIN
-            JsonString:='{"return": [{"id": 1,"first_name": "aaa","last_name": "ddd",},{"id": 2,"first_name": "bbb","last_name": "eee",},{"id": 3,"first_name": "ccc","last_name": "ttt",}]}';
-            //Create JSONArray String
-            JSONManagement.InitializeObject(JsonString);
-            JSONManagement.GetJSONObject(JObject);
-            ArrayString := JObject.SelectToken('return').ToString;
-
-            //Read and Parse JSONArray
-            CLEAR(JSONManagement);
-            CLEAR(JObject);
-            JSONManagement.InitializeCollection(ArrayString);
-            JSONManagement.GetJsonArray(JSONArray);
-
-            //loop and can do insert
-            FOREACH JObject IN  JSONArray DO BEGIN
-                MESSAGE('%1 %2 %3', JObject.GetValue('id') ,
-                                    JObject.GetValue('first_name'),
-                                    JObject.GetValue('last_name')
-                           );
-            END;
+            //GetParseJSONArray;
+            GetParseJSONObject;
           END;
 
   }
@@ -42,6 +25,41 @@ OBJECT Codeunit 50204 JsonParse
       JObject@1002 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
       ArrayString@1003 : Text[1024];
       JsonString@1004 : Text[1024];
+
+    LOCAL PROCEDURE GetParseJSONArray@2();
+    BEGIN
+      JsonString:='{"return": [{"id": 1,"first_name": "aaa","last_name": "ddd",},{"id": 2,"first_name": "bbb","last_name": "eee",},{"id": 3,"first_name": "ccc","last_name": "ttt",}]}';
+      //Read and Parse JObject and Create ArrayString
+      JSONManagement.InitializeObject(JsonString);
+      JSONManagement.GetJSONObject(JObject);
+      ArrayString := JObject.SelectToken('return').ToString;
+
+      //Read and Parse JSONArray
+      CLEAR(JSONManagement);
+      CLEAR(JObject);
+      JSONManagement.InitializeCollection(ArrayString);
+      JSONManagement.GetJsonArray(JSONArray);
+
+      //loop and can do insert
+      FOREACH JObject IN  JSONArray DO BEGIN
+          MESSAGE('%1 %2 %3', JObject.GetValue('id') ,
+                              JObject.GetValue('first_name'),
+                              JObject.GetValue('last_name')
+                     );
+      END;
+    END;
+
+    LOCAL PROCEDURE GetParseJSONObject@3();
+    BEGIN
+      JsonString:='{"id": 1,"first_name": "aaa","last_name": "ddd",}';
+      //Read and Parse JObject and Create ArrayString
+      JSONManagement.InitializeObject(JsonString);
+      JSONManagement.GetJSONObject(JObject);
+      MESSAGE('%1 %2 %3', JObject.GetValue('id') ,
+                              JObject.GetValue('first_name'),
+                              JObject.GetValue('last_name')
+                     );
+    END;
 
     EVENT JSONArray@1001::ListChanged@117(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
     BEGIN
