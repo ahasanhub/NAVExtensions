@@ -1,0 +1,43 @@
+OBJECT Codeunit 50203 ERPSOAPService
+{
+  OBJECT-PROPERTIES
+  {
+    Date=05/08/23;
+    Time=[ 3:36:52 PM];
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      CustomerBillCU@1000 : Codeunit 50201;
+
+    [External]
+    PROCEDURE InsertCustomerBill@1(Name@1000 : Text[250];Year@1001 : Integer;Month@1002 : Text[30];Amount@1003 : Decimal);
+    BEGIN
+      CustomerBillCU.BillGeneration(Name,Year,Month,Amount);
+    END;
+
+    [External]
+    PROCEDURE UpdateCustomerBill@2(Id@1000 : Integer;Name@1001 : Text[250];Year@1002 : Integer;Month@1003 : Text[30];Amount@1004 : Decimal);
+    BEGIN
+      CustomerBillCU.UpdateCustomerBill(Id,Name,Year,Month,Amount);
+    END;
+
+    [External]
+    PROCEDURE DeleteCustomerBill@3(Id@1000 : Integer);
+    BEGIN
+      CustomerBillCU.DeleteCustomerBill(Id);
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

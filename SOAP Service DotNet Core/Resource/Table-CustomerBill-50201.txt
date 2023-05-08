@@ -1,0 +1,36 @@
+OBJECT Table 50201 CustomerBill
+{
+  OBJECT-PROPERTIES
+  {
+    Date=02/07/23;
+    Time=[ 4:43:27 PM];
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;CustomerID          ;Integer       ;InitValue=0;
+                                                   AutoIncrement=Yes }
+    { 2   ;   ;Name                ;Text250        }
+    { 3   ;   ;Year                ;Integer        }
+    { 4   ;   ;Month               ;Text30         }
+    { 5   ;   ;Amount              ;Decimal        }
+  }
+  KEYS
+  {
+    {    ;CustomerID                              ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

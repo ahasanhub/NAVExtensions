@@ -1,0 +1,62 @@
+OBJECT Codeunit 50201 Customer Bill Payment
+{
+  OBJECT-PROPERTIES
+  {
+    Date=05/08/23;
+    Time=[ 3:35:24 PM];
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            BillGeneration('Ahasan',2023,'January',500);
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      CustomerBillTBL@1004 : Record 50201;
+
+    [External]
+    PROCEDURE BillGeneration@1(Name@1000 : Text[100];Year@1005 : Integer;Month@1003 : Text;Amount@1001 : Decimal);
+    BEGIN
+      CustomerBillTBL.INIT;
+      CustomerBillTBL.CustomerID:=0;
+      CustomerBillTBL.Name:=Name;
+      CustomerBillTBL.Year:=Year;
+      CustomerBillTBL.Month:=Month;
+      CustomerBillTBL.Amount:=Amount;
+      CustomerBillTBL.INSERT;
+    END;
+
+    [External]
+    PROCEDURE Greeting@2(Name@1000 : Text) : Text[250];
+    BEGIN
+      EXIT('Hello'+Name);
+    END;
+
+    [External]
+    PROCEDURE UpdateCustomerBill@3(Id@1000 : Integer;Name@1001 : Text[250];Year@1002 : Integer;Month@1003 : Text[30];Amount@1004 : Decimal);
+    BEGIN
+      CustomerBillTBL.GET(Id);
+      CustomerBillTBL.Name:=Name;
+      CustomerBillTBL.Year:=Year;
+      CustomerBillTBL.Month:=Month;
+      CustomerBillTBL.Amount:=Amount;
+      CustomerBillTBL.MODIFY;
+    END;
+
+    [External]
+    PROCEDURE DeleteCustomerBill@4(Id@1000 : Integer);
+    BEGIN
+      CustomerBillTBL.GET(Id);
+      CustomerBillTBL.DELETE;
+    END;
+
+    BEGIN
+    END.
+  }
+}
+
