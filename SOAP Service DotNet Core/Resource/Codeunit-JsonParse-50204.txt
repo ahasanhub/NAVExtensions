@@ -1,0 +1,82 @@
+OBJECT Codeunit 50204 JsonParse
+{
+  OBJECT-PROPERTIES
+  {
+    Date=05/08/23;
+    Time=10:52:54 PM;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            JsonString:='{"return": [{"id": 1,"first_name": "aaa","last_name": "ddd",},{"id": 2,"first_name": "bbb","last_name": "eee",},{"id": 3,"first_name": "ccc","last_name": "ttt",}]}';
+            //Create JSONArray String
+            JSONManagement.InitializeObject(JsonString);
+            JSONManagement.GetJSONObject(JObject);
+            ArrayString := JObject.SelectToken('return').ToString;
+
+            //Read and Parse JSONArray
+            CLEAR(JSONManagement);
+            CLEAR(JObject);
+            JSONManagement.InitializeCollection(ArrayString);
+            JSONManagement.GetJsonArray(JSONArray);
+
+            //loop and can do insert
+            FOREACH JObject IN  JSONArray DO BEGIN
+                MESSAGE('%1 %2 %3', JObject.GetValue('id') ,
+                                    JObject.GetValue('first_name'),
+                                    JObject.GetValue('last_name')
+                           );
+            END;
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      JSONManagement@1000 : Codeunit 5459;
+      JSONArray@1001 : DotNet "'Newtonsoft.Json, 
+                                    Version=9.0.0.0, Culture=neutral, 
+                                    PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JArray";
+      JObject@1002 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      ArrayString@1003 : Text[1024];
+      JsonString@1004 : Text[1024];
+
+    EVENT JSONArray@1001::ListChanged@117(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1001::AddingNew@118(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1001::CollectionChanged@119(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::PropertyChanged@117(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::PropertyChanging@118(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangingEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::ListChanged@119(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::AddingNew@120(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::CollectionChanged@121(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    BEGIN
+    END.
+  }
+}
+
