@@ -31,3 +31,4 @@ E:\AhasanDrive\My Drive\ERPSOAPServiceApi\bin\Debug\netcoreapp3.1\System.Service
 E:\AhasanDrive\My Drive\ERPSOAPServiceApi\bin\Debug\netcoreapp3.1\System.ServiceModel.dll
 E:\AhasanDrive\My Drive\ERPSOAPServiceApi\bin\Debug\netcoreapp3.1\System.ServiceModel.Security.dll
 E:\AhasanDrive\My Drive\ERPSOAPServiceApi\obj\Debug\netcoreapp3.1\ERPSOAPServiceApi.csproj.CopyComplete
+E:\AhasanDrive\My Drive\ERPSOAPServiceApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll

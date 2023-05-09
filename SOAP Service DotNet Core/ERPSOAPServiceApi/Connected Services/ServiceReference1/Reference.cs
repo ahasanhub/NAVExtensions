@@ -45,16 +45,20 @@ namespace ServiceReference1
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ERPSOAPService", Order=3)]
         public decimal amount;
         
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ERPSOAPService", Order=4)]
+        public string profileJson;
+        
         public InsertCustomerBill()
         {
         }
         
-        public InsertCustomerBill(string name, int year, string month, decimal amount)
+        public InsertCustomerBill(string name, int year, string month, decimal amount, string profileJson)
         {
             this.name = name;
             this.year = year;
             this.month = month;
             this.amount = amount;
+            this.profileJson = profileJson;
         }
     }
     
@@ -206,13 +210,14 @@ namespace ServiceReference1
             return base.Channel.InsertCustomerBillAsync(request);
         }
         
-        public System.Threading.Tasks.Task<ServiceReference1.InsertCustomerBill_Result> InsertCustomerBillAsync(string name, int year, string month, decimal amount)
+        public System.Threading.Tasks.Task<ServiceReference1.InsertCustomerBill_Result> InsertCustomerBillAsync(string name, int year, string month, decimal amount, string profileJson)
         {
             ServiceReference1.InsertCustomerBill inValue = new ServiceReference1.InsertCustomerBill();
             inValue.name = name;
             inValue.year = year;
             inValue.month = month;
             inValue.amount = amount;
+            inValue.profileJson = profileJson;
             return ((ServiceReference1.ERPSOAPService_Port)(this)).InsertCustomerBillAsync(inValue);
         }
         

@@ -2,8 +2,8 @@ OBJECT Codeunit 50203 ERPSOAPService
 {
   OBJECT-PROPERTIES
   {
-    Date=05/08/23;
-    Time=[ 3:36:52 PM];
+    Date=05/09/23;
+    Time=12:00:24 PM;
     Modified=Yes;
     Version List=;
   }
@@ -19,9 +19,12 @@ OBJECT Codeunit 50203 ERPSOAPService
       CustomerBillCU@1000 : Codeunit 50201;
 
     [External]
-    PROCEDURE InsertCustomerBill@1(Name@1000 : Text[250];Year@1001 : Integer;Month@1002 : Text[30];Amount@1003 : Decimal);
+    PROCEDURE InsertCustomerBill@1(Name@1000 : Text[250];Year@1001 : Integer;Month@1002 : Text[30];Amount@1003 : Decimal;ProfileJson@1005 : Text[1024]);
+    VAR
+      ProfileTbl@1004 : Record 50202;
     BEGIN
       CustomerBillCU.BillGeneration(Name,Year,Month,Amount);
+      InsertProfile(ProfileJson);
     END;
 
     [External]
@@ -34,6 +37,44 @@ OBJECT Codeunit 50203 ERPSOAPService
     PROCEDURE DeleteCustomerBill@3(Id@1000 : Integer);
     BEGIN
       CustomerBillCU.DeleteCustomerBill(Id);
+    END;
+
+    LOCAL PROCEDURE InsertProfile@4(ProfileJson@1000 : Text[1024]);
+    VAR
+      JSONManagement@1005 : Codeunit 5459;
+      JSONArray@1004 : DotNet "'Newtonsoft.Json, 
+                                    Version=9.0.0.0, Culture=neutral, 
+                                    PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JArray";
+      JObject@1003 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      ArrayString@1002 : Text[1024];
+      JsonString@1001 : Text[1024];
+      ProfileTbl@1006 : Record 50202;
+    BEGIN
+      //JsonString:='{"return": [{"id": 1,"first_name": "aaa","last_name": "ddd",},{"id": 2,"first_name": "bbb","last_name": "eee",},{"id": 3,"first_name": "ccc","last_name": "ttt",}]}';
+      JsonString:=ProfileJson;
+      //Read and Parse JObject and Create ArrayString
+      JSONManagement.InitializeObject(JsonString);
+      JSONManagement.GetJSONObject(JObject);
+      ArrayString := JObject.SelectToken('result').ToString;
+
+      //Read and Parse JSONArray
+      CLEAR(JSONManagement);
+      CLEAR(JObject);
+      JSONManagement.InitializeCollection(ArrayString);
+      JSONManagement.GetJsonArray(JSONArray);
+
+      //loop and can do insert
+      FOREACH JObject IN  JSONArray DO BEGIN
+      //    MESSAGE('%1 %2 %3', JObject.GetValue('id') ,
+      //                        JObject.GetValue('first_name'),
+      //                        JObject.GetValue('last_name')
+      //               );
+      ProfileTbl.INIT;
+      ProfileTbl.id:=0;
+      ProfileTbl.FirstName:=FORMAT(JObject.GetValue('first_name'));
+      ProfileTbl.LastName:= FORMAT(JObject.GetValue('last_name'));
+      ProfileTbl.INSERT;
+      END;
     END;
 
     BEGIN

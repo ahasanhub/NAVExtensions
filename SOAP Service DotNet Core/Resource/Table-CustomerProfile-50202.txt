@@ -1,0 +1,33 @@
+OBJECT Table 50202 CustomerProfile
+{
+  OBJECT-PROPERTIES
+  {
+    Date=05/09/23;
+    Time=12:04:25 PM;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;id                  ;Integer       ;AutoIncrement=Yes }
+    { 2   ;   ;FirstName           ;Text30         }
+    { 3   ;   ;LastName            ;Text30         }
+  }
+  KEYS
+  {
+    {    ;id                                      ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
