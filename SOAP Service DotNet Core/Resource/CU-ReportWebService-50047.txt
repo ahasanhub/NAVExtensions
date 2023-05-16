@@ -1,0 +1,58 @@
+OBJECT Codeunit 50047 Report Web Service
+{
+  OBJECT-PROPERTIES
+  {
+    Date=05/15/23;
+    Time=[ 1:55:18 PM];
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            //GenerateReport(50156,'');
+            GetReportRequestParameter;
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      FileManagement@1001 : Codeunit 419;
+      TempBlob@1002 : Record 99008535;
+      OutsS@1003 : OutStream;
+      InS@1004 : InStream;
+      fileName@1000 : Text[100];
+
+    [External]
+    PROCEDURE GenerateReport@3(ReportNo@1000 : Integer;Parameters@1001 : Text) : Text;
+    BEGIN
+      // fileName := 'C:\PdfDocuments\';
+      // fileName += FORMAT(CREATEGUID);
+      // fileName := DELCHR(fileName, '=', '{-}');
+      // fileName += '.pdf';
+      // REPORT.SAVEASPDF(50156,fileName);
+      // FileManagement.BLOBImportFromServerFile(TempBlob,fileName);
+      //
+      // EXIT(TempBlob.ToBase64String);
+      TempBlob.Blob.CREATEOUTSTREAM(OutsS);
+      REPORT.SAVEAS(ReportNo,Parameters,REPORTFORMAT::Pdf,OutsS);
+      TempBlob.Blob.CREATEINSTREAM(InS);
+      MESSAGE(FORMAT(TempBlob.ToBase64String()));
+      EXIT(TempBlob.ToBase64String());
+    END;
+
+    LOCAL PROCEDURE GetReportRequestParameter@1();
+    VAR
+      XmlParameters@1000 : Text;
+    BEGIN
+      XmlParameters:=REPORT.RUNREQUESTPAGE(50156);
+      REPORT.PRINT(50156,XmlParameters);
+      //MESSAGE(REPORT.RUNREQUESTPAGE(50019));
+    END;
+
+    BEGIN
+    END.
+  }
+}
+
