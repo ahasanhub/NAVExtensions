@@ -1,0 +1,149 @@
+OBJECT Codeunit 60030 CreateJSONObject
+{
+  OBJECT-PROPERTIES
+  {
+    Date=05/23/23;
+    Time=[ 6:18:14 AM];
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            //------------------------Create Json
+            IF ISNULL(StringBuilder) THEN
+              Initialize;
+
+            PurchaseHeader.SETRANGE("Document Type",PurchaseHeader."Document Type"::Order);
+            PurchaseHeader.SETFILTER("No.",'PO0001409');
+            IF PurchaseHeader.FINDFIRST THEN
+            //JsonTextWriter.WriteStartArray;
+               BEGIN REPEAT
+                JsonTextWriter.WriteStartObject;
+                JsonTextWriter.WritePropertyName('DocumentNo');
+                JsonTextWriter.WriteValue(PurchaseHeader."No.");
+                //Create Branch of Address  Start
+                JsonTextWriter.WritePropertyName('Address');
+                JsonTextWriter.WriteStartObject;
+                JsonTextWriter.WritePropertyName('Address1');
+                JsonTextWriter.WriteValue('Kafrul');
+                JsonTextWriter.WritePropertyName('City');
+                JsonTextWriter.WriteValue('Dhaka');
+                JsonTextWriter.WriteEndObject;
+                //Create Branch of Address  End
+                //Create Array of Item Details  Start
+                JsonTextWriter.WritePropertyName('ItemDetails');
+                JsonTextWriter.WriteStartArray;
+                PurchaseLine.SETRANGE("Document Type",PurchaseHeader."Document Type");
+                PurchaseLine.SETRANGE("Document No.",PurchaseHeader."No.");
+                IF PurchaseLine.FINDSET THEN
+                REPEAT
+                     JsonTextWriter.WriteStartObject;
+                     JsonTextWriter.WritePropertyName('ItemNo');
+                     JsonTextWriter.WriteValue(PurchaseLine."No.");
+                     JsonTextWriter.WritePropertyName('PrName');
+                     JsonTextWriter.WriteValue(PurchaseLine.Description);
+                     JsonTextWriter.WriteEndObject;
+                UNTIL PurchaseLine.NEXT =0;
+                JsonTextWriter.WriteEndArray;
+                JsonTextWriter.WriteEndObject;
+            UNTIL PurchaseHeader.NEXT =0;
+            END;
+            JsonTextWriter.Flush;
+            JSonString:=GetJSon;
+            MESSAGE(JSonString);
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      JSonString@1002 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.String";
+      JObject@1001 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      ArrayString@1003 : Text;
+      JSONArray@1004 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      PurchaseHeader@1005 : Record 38;
+      PurchaseLine@1006 : Record 39;
+      ArrayString1@1008 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.String";
+      JToken@1009 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JToken";
+      TempJObject@1010 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      counter@1011 : Variant;
+      JsonTextWriter@1013 : DotNet "'Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.JsonTextWriter";
+      StringBuilder@1017 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Text.StringBuilder";
+      StringWriter@1016 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StringWriter";
+      JsonFormatting@1015 : DotNet "'Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Formatting";
+      GlobalNULL@1014 : Variant;
+
+    LOCAL PROCEDURE Initialize@1500005();
+    BEGIN
+      StringBuilder := StringBuilder.StringBuilder;
+      StringWriter := StringWriter.StringWriter(StringBuilder);
+      JsonTextWriter := JsonTextWriter.JsonTextWriter(StringWriter);
+      JsonTextWriter.Formatting := JsonFormatting.Indented;
+
+      CLEAR(GlobalNULL);
+    END;
+
+    PROCEDURE GetJSon@1000000013() JSon : Text;
+    BEGIN
+      JSon := StringBuilder.ToString;
+      Initialize;
+    END;
+
+    EVENT JObject@1001::PropertyChanged@105(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1001::PropertyChanging@106(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangingEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1001::ListChanged@107(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1001::AddingNew@108(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1001::CollectionChanged@109(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1004::ListChanged@105(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1004::AddingNew@106(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1004::CollectionChanged@107(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT TempJObject@1010::PropertyChanged@105(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT TempJObject@1010::PropertyChanging@106(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangingEventArgs");
+    BEGIN
+    END;
+
+    EVENT TempJObject@1010::ListChanged@107(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT TempJObject@1010::AddingNew@108(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT TempJObject@1010::CollectionChanged@109(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    BEGIN
+    END.
+  }
+}
+
