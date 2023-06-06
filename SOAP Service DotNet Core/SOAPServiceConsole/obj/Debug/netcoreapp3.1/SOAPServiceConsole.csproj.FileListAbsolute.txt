@@ -25,3 +25,30 @@ E:\AhasanDrive\My Drive\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceCo
 E:\AhasanDrive\My Drive\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.dll
 E:\AhasanDrive\My Drive\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.pdb
 E:\AhasanDrive\My Drive\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.genruntimeconfig.cache
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\SOAPServiceConsole.exe
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\SOAPServiceConsole.deps.json
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\SOAPServiceConsole.runtimeconfig.json
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\SOAPServiceConsole.runtimeconfig.dev.json
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\SOAPServiceConsole.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\SOAPServiceConsole.pdb
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.Private.ServiceModel.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.Security.Cryptography.Pkcs.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.Security.Cryptography.Xml.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.Security.Permissions.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.ServiceModel.Duplex.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.ServiceModel.Http.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.ServiceModel.NetTcp.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.ServiceModel.Primitives.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.ServiceModel.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\System.ServiceModel.Security.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Security.Cryptography.Pkcs.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.csproj.AssemblyReference.cache
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.GeneratedMSBuildEditorConfig.editorconfig
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.AssemblyInfoInputs.cache
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.AssemblyInfo.cs
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.csproj.CoreCompileInputs.cache
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.csproj.CopyComplete
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.dll
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.pdb
+D:\Software\SOAP Service DotNet Core\SOAPServiceConsole\obj\Debug\netcoreapp3.1\SOAPServiceConsole.genruntimeconfig.cache

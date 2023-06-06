@@ -7,17 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ServiceReference1
+namespace WebServiceLocalBC
 {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit", ConfigurationName="ServiceReference1.ExecuteCodeUnit_Port")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit", ConfigurationName="WebServiceLocalBC.ExecuteCodeUnit_Port")]
     public interface ExecuteCodeUnit_Port
     {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit:Execute", ReplyAction="*")]
-        System.Threading.Tasks.Task<ServiceReference1.Execute_Result> ExecuteAsync(ServiceReference1.Execute request);
+        System.Threading.Tasks.Task<WebServiceLocalBC.Execute_Result> ExecuteAsync(WebServiceLocalBC.Execute request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -65,13 +65,13 @@ namespace ServiceReference1
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
-    public interface ExecuteCodeUnit_PortChannel : ServiceReference1.ExecuteCodeUnit_Port, System.ServiceModel.IClientChannel
+    public interface ExecuteCodeUnit_PortChannel : WebServiceLocalBC.ExecuteCodeUnit_Port, System.ServiceModel.IClientChannel
     {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
-    public partial class ExecuteCodeUnit_PortClient : System.ServiceModel.ClientBase<ServiceReference1.ExecuteCodeUnit_Port>, ServiceReference1.ExecuteCodeUnit_Port
+    public partial class ExecuteCodeUnit_PortClient : System.ServiceModel.ClientBase<WebServiceLocalBC.ExecuteCodeUnit_Port>, WebServiceLocalBC.ExecuteCodeUnit_Port
     {
         
         /// <summary>
@@ -115,17 +115,17 @@ namespace ServiceReference1
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<ServiceReference1.Execute_Result> ServiceReference1.ExecuteCodeUnit_Port.ExecuteAsync(ServiceReference1.Execute request)
+        System.Threading.Tasks.Task<WebServiceLocalBC.Execute_Result> WebServiceLocalBC.ExecuteCodeUnit_Port.ExecuteAsync(WebServiceLocalBC.Execute request)
         {
             return base.Channel.ExecuteAsync(request);
         }
         
-        public System.Threading.Tasks.Task<ServiceReference1.Execute_Result> ExecuteAsync(string actionName, string actionParameters)
+        public System.Threading.Tasks.Task<WebServiceLocalBC.Execute_Result> ExecuteAsync(string actionName, string actionParameters)
         {
-            ServiceReference1.Execute inValue = new ServiceReference1.Execute();
+            WebServiceLocalBC.Execute inValue = new WebServiceLocalBC.Execute();
             inValue.actionName = actionName;
             inValue.actionParameters = actionParameters;
-            return ((ServiceReference1.ExecuteCodeUnit_Port)(this)).ExecuteAsync(inValue);
+            return ((WebServiceLocalBC.ExecuteCodeUnit_Port)(this)).ExecuteAsync(inValue);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -156,7 +156,7 @@ namespace ServiceReference1
         {
             if ((endpointConfiguration == EndpointConfiguration.ExecuteCodeUnit_Port))
             {
-                return new System.ServiceModel.EndpointAddress("http://win-nem95r88i3f:7047/ERPDEVNAV110/WS/APSCL/Codeunit/ExecuteCodeUnit");
+                return new System.ServiceModel.EndpointAddress("http://win-2ajr95f2ai3:7047/ERPDEVBC140/WS/APSCL/Codeunit/ExecuteCodeUnit");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

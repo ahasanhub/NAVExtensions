@@ -1,0 +1,161 @@
+OBJECT Codeunit 50046 ExecuteCodeUnit
+{
+  OBJECT-PROPERTIES
+  {
+    Date=05/14/23;
+    Time=[ 6:40:42 PM];
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            //JsonString:='{"document_no":"PO0001404","items": [{"item_no": "PO0001347","receive_qty": 2,}]}';
+            //MESSAGE(Execute('PurchaseReceive',JsonString));
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      JSONManagement@1000 : Codeunit 5459;
+      JSONArray@1001 : DotNet "'Newtonsoft.Json, 
+                                    Version=9.0.0.0, Culture=neutral, 
+                                    PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JArray";
+      JObject@1002 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      ArrayString@1003 : Text[1024];
+      JsonString@1004 : Text[1024];
+
+    [External]
+    PROCEDURE Execute@2(ActionName@1003 : Text[100];JsonParmString@1000 : Text[1024]) Result : Text[1024];
+    VAR
+      PurchaseHeader@1001 : Record 38;
+      DocumentNo@1002 : Code[20];
+    BEGIN
+      Result:='';
+      CASE ActionName OF
+        'PurchaseReceive':
+          BEGIN
+            Result:=PurchaseReceive(JsonParmString);
+            END;
+        END;
+
+      EXIT(Result);
+    END;
+
+    LOCAL PROCEDURE PurchaseReceive@1(JsonParmString@1000 : Text[1024]) : Text[1024];
+    VAR
+      PurchaseHeader@1001 : Record 38;
+      DocumentNo@1002 : Code[20];
+    BEGIN
+      JSONManagement.InitializeObject(JsonParmString);
+      JSONManagement.GetJSONObject(JObject);
+      ArrayString := JObject.SelectToken('items').ToString;
+      DocumentNo:=FORMAT(JObject.GetValue('document_no'));
+      CLEARLASTERROR();
+      ValidatePurchaseOrder(DocumentNo);
+      UpdatePurchaseLine(DocumentNo,ArrayString);
+
+      IF GETLASTERRORTEXT<>'' THEN BEGIN
+         EXIT(GETLASTERRORTEXT);
+         END;
+
+       PurchaseHeader.SETFILTER("Document Type",'=%1',PurchaseHeader."Document Type"::Order);
+       PurchaseHeader.SETFILTER("No.",'=%1',DocumentNo);
+       IF PurchaseHeader.FINDFIRST THEN BEGIN
+          PurchaseHeader.Receive:=TRUE;
+          PurchaseHeader.Invoice:=FALSE;
+          CODEUNIT.RUN(CODEUNIT::"Purch.-Post",PurchaseHeader);
+       END;
+
+      EXIT('Purchase has been received.');
+    END;
+
+    LOCAL PROCEDURE UpdatePurchaseLine@3(DocumentNo@1000 : Code[20];ItemArrayString@1001 : Text[1024]);
+    VAR
+      PurchaseLine@1002 : Record 39;
+      ItemNo@1003 : Code[20];
+      ReceiveQty@1004 : Integer;
+    BEGIN
+      CLEAR(JSONManagement);
+      CLEAR(JObject);
+      JSONManagement.InitializeCollection(ItemArrayString);
+      JSONManagement.GetJsonArray(JSONArray);
+
+      //loop and can do insert
+      FOREACH JObject IN  JSONArray DO BEGIN
+        ItemNo:=FORMAT(JObject.GetValue('item_no'));
+        EVALUATE(ReceiveQty,FORMAT(JObject.GetValue('receive_qty')));
+
+        PurchaseLine.SETFILTER("Document Type",'=%1',PurchaseLine."Document Type"::Order);
+        PurchaseLine.SETFILTER("Document No.",'=%1',DocumentNo);
+        PurchaseLine.SETFILTER("No.",'=%1',ItemNo);
+        IF PurchaseLine.FINDSET THEN BEGIN
+          IF (PurchaseLine.Quantity >= PurchaseLine."Quantity Received"+ReceiveQty) THEN BEGIN
+              PurchaseLine."Qty. to Invoice":=ReceiveQty;
+              PurchaseLine."Qty. to Receive":=ReceiveQty;
+              PurchaseLine."Qty. to Receive (Base)":=ReceiveQty;
+              PurchaseLine.MODIFY(TRUE);
+            END
+            ELSE
+            BEGIN
+               ERROR('You cannot receive more items ('+ItemNo+') than you have ordered. ');
+              END;
+          END
+          ELSE
+          BEGIN
+            ERROR('Item ('+ItemNo+') does not exist in ordered item list.');
+            END;
+
+      END;
+    END;
+
+    LOCAL PROCEDURE ValidatePurchaseOrder@4(DocumentNo@1000 : Code[20]);
+    VAR
+      PurchaseHeader@1001 : Record 38;
+    BEGIN
+      PurchaseHeader.SETFILTER("Document Type",'=%1',PurchaseHeader."Document Type"::Order);
+      PurchaseHeader.SETFILTER("No.",'=%1',DocumentNo);
+      IF NOT PurchaseHeader.FINDSET THEN BEGIN
+        ERROR('Purchase order does not exist.');
+        END;
+      //MESSAGE(GETLASTERRORTEXT);
+    END;
+
+    EVENT JSONArray@1001::ListChanged@123(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1001::AddingNew@124(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1001::CollectionChanged@125(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::PropertyChanged@123(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::PropertyChanging@124(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangingEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::ListChanged@125(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::AddingNew@126(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::CollectionChanged@127(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

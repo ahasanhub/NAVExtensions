@@ -1,14 +1,14 @@
 {
   "ExtendedData": {
     "inputs": [
-      "http://win-nem95r88i3f:7047/ERPDEVNAV110/WS/APSCL/Codeunit/ExecuteCodeUnit"
+      "http://bctest.bdpowersectorerp.com:7047/POWERDIVBC/WS/APSCL/Codeunit/ExecuteCodeUnit"
     ],
     "collectionTypes": [
       "System.Array",
       "System.Collections.Generic.Dictionary`2"
     ],
     "namespaceMappings": [
-      "*, ServiceReference1"
+      "*, ServiceReference3"
     ],
     "references": [
       "Newtonsoft.Json, {Newtonsoft.Json, 13.0.3}",

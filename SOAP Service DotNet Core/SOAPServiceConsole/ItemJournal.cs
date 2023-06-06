@@ -4,10 +4,10 @@ using System.Text;
 
 namespace SOAPServiceConsole
 {
-	public class PurchaseOrder
+	public class ItemJournal
 	{
+        public string posting_date { get; set; }
         public string document_no { get; set; }
-        public string order_date { get; set; }
-        public List<Item> items { get; set; }
+        public List<JournalLineItem> line_items { get; set; }
     }
 }

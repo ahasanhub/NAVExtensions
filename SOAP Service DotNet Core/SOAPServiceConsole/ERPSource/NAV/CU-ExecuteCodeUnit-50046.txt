@@ -1,0 +1,180 @@
+OBJECT Codeunit 50046 ExecuteCodeUnit
+{
+  OBJECT-PROPERTIES
+  {
+    Date=05/14/23;
+    Time=[ 6:43:20 PM];
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            //JsonString:='{"document_no":"PO0001404","items": [{"item_no": "PO0001347","receive_qty": 2,}]}';
+            //MESSAGE(Execute('PurchaseReceive',JsonString));
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      JSONManagement@1004 : Codeunit 5459;
+      JSONArray@1003 : DotNet "'Newtonsoft.Json, 
+                                    Version=9.0.0.0, Culture=neutral, 
+                                    PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JArray";
+      JObject@1002 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      ArrayString@1001 : Text[1024];
+      JsonString@1000 : Text[1024];
+
+    [External]
+    PROCEDURE Execute@1(ActionName@1003 : Text[100];JsonParmString@1000 : Text[1024]) Result : Text[1024];
+    BEGIN
+      Result:='';
+      CASE ActionName OF
+        'PurchaseReceive':
+          BEGIN
+            Result:=PurchaseReceive(JsonParmString);
+            END;
+        END;
+
+      EXIT(Result);
+    END;
+
+    LOCAL PROCEDURE PurchaseReceive@5(JsonParmString@1000 : Text[1024]) : Text[1024];
+    VAR
+      PurchaseHeader@1002 : Record 38;
+      DocumentNo@1001 : Code[20];
+    BEGIN
+
+      //JsonString:='{"document_no":"PO0001401","items": [{"item_no": "PO0001347","receive_qty": 3,}]}';
+
+      JSONManagement.InitializeObject(JsonParmString);
+      JSONManagement.GetJSONObject(JObject);
+      ArrayString := JObject.SelectToken('items').ToString;
+      DocumentNo:=FORMAT(JObject.GetValue('document_no'));
+      CLEARLASTERROR();
+      ValidatePurchaseOrder(DocumentNo);
+      UpdatePurchaseLine(DocumentNo,ArrayString);
+
+      IF GETLASTERRORTEXT<>'' THEN BEGIN
+         EXIT(GETLASTERRORTEXT);
+         END;
+
+       PurchaseHeader.SETFILTER("Document Type",'=%1',PurchaseHeader."Document Type"::Order);
+       PurchaseHeader.SETFILTER("No.",'=%1',DocumentNo);
+       IF PurchaseHeader.FINDFIRST THEN BEGIN
+          PurchaseHeader.Receive:=TRUE;
+          PurchaseHeader.Invoice:=FALSE;
+          CODEUNIT.RUN(CODEUNIT::"Purch.-Post",PurchaseHeader);
+       END;
+
+      EXIT('Purchase has been received.');
+
+      //==============================================================
+      // Docno:='PO0001400';
+      // PurchaseLine.SETFILTER("Document Type",'=%1',PurchaseLine."Document Type"::Order);
+      // PurchaseLine.SETFILTER("Document No.",'=%1',Docno);
+      // IF PurchaseLine.FINDSET THEN REPEAT
+      //  PurchaseLine."Qty. to Invoice":=2;
+      //  PurchaseLine."Qty. to Receive":=2;
+      //  PurchaseLine."Qty. to Receive (Base)":=2;
+      //  PurchaseLine.MODIFY(TRUE);
+      //  UNTIL PurchaseLine.NEXT=0;
+      //
+      // PurchaseHeader.SETFILTER("Document Type",'=%1',PurchaseHeader."Document Type"::Order);
+      // PurchaseHeader.SETFILTER("No.",'=%1',Docno);
+      // IF PurchaseHeader.FINDFIRST THEN BEGIN
+      //    PurchaseHeader.Receive:=TRUE;
+      //    PurchaseHeader.Invoice:=FALSE;
+      //    CODEUNIT.RUN(CODEUNIT::"Purch.-Post",PurchaseHeader);
+      // END;
+    END;
+
+    LOCAL PROCEDURE UpdatePurchaseLine@3(DocumentNo@1000 : Code[20];ItemArrayString@1001 : Text[1024]);
+    VAR
+      PurchaseLine@1002 : Record 39;
+      ItemNo@1003 : Code[20];
+      ReceiveQty@1004 : Integer;
+    BEGIN
+      CLEAR(JSONManagement);
+      CLEAR(JObject);
+      JSONManagement.InitializeCollection(ItemArrayString);
+      JSONManagement.GetJsonArray(JSONArray);
+
+      //loop and can do insert
+      FOREACH JObject IN  JSONArray DO BEGIN
+        ItemNo:=FORMAT(JObject.GetValue('item_no'));
+        EVALUATE(ReceiveQty,FORMAT(JObject.GetValue('receive_qty')));
+
+        PurchaseLine.SETFILTER("Document Type",'=%1',PurchaseLine."Document Type"::Order);
+        PurchaseLine.SETFILTER("Document No.",'=%1',DocumentNo);
+        PurchaseLine.SETFILTER("No.",'=%1',ItemNo);
+        IF PurchaseLine.FINDSET THEN BEGIN
+          IF (PurchaseLine.Quantity >= PurchaseLine."Quantity Received"+ReceiveQty) THEN BEGIN
+              PurchaseLine."Qty. to Invoice":=ReceiveQty;
+              PurchaseLine."Qty. to Receive":=ReceiveQty;
+              PurchaseLine."Qty. to Receive (Base)":=ReceiveQty;
+              PurchaseLine.MODIFY(TRUE);
+            END
+            ELSE
+            BEGIN
+               ERROR('You cannot receive more items ('+ItemNo+') than you have ordered. ');
+              END;
+          END
+          ELSE
+          BEGIN
+            ERROR('Item ('+ItemNo+') does not exist in ordered item list.');
+            END;
+
+      END;
+    END;
+
+    LOCAL PROCEDURE ValidatePurchaseOrder@10(DocumentNo@1001 : Code[20]);
+    VAR
+      PurchaseHeader@1000 : Record 38;
+    BEGIN
+      PurchaseHeader.SETFILTER("Document Type",'=%1',PurchaseHeader."Document Type"::Order);
+      PurchaseHeader.SETFILTER("No.",'=%1',DocumentNo);
+      IF NOT PurchaseHeader.FINDSET THEN BEGIN
+        ERROR('Purchase order does not exist.');
+        END;
+      //MESSAGE(GETLASTERRORTEXT);
+    END;
+
+    EVENT JObject@1002::PropertyChanged@117(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::PropertyChanging@118(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.PropertyChangingEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::ListChanged@119(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::AddingNew@120(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT JObject@1002::CollectionChanged@121(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1003::ListChanged@117(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.ListChangedEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1003::AddingNew@118(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.ComponentModel.AddingNewEventArgs");
+    BEGIN
+    END;
+
+    EVENT JSONArray@1003::CollectionChanged@119(sender@1001 : Variant;e@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NotifyCollectionChangedEventArgs");
+    BEGIN
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

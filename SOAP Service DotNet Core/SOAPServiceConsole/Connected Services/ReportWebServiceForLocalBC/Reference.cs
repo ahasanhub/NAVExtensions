@@ -7,71 +7,71 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ServiceReference1
+namespace ReportWebServiceForLocalBC
 {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit", ConfigurationName="ServiceReference1.ExecuteCodeUnit_Port")]
-    public interface ExecuteCodeUnit_Port
+    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ReportWebService", ConfigurationName="ReportWebServiceForLocalBC.ReportWebService_Port")]
+    public interface ReportWebService_Port
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit:Execute", ReplyAction="*")]
-        System.Threading.Tasks.Task<ServiceReference1.Execute_Result> ExecuteAsync(ServiceReference1.Execute request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:microsoft-dynamics-schemas/codeunit/ReportWebService:GenerateReport", ReplyAction="*")]
+        System.Threading.Tasks.Task<ReportWebServiceForLocalBC.GenerateReport_Result> GenerateReportAsync(ReportWebServiceForLocalBC.GenerateReport request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="Execute", WrapperNamespace="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit", IsWrapped=true)]
-    public partial class Execute
+    [System.ServiceModel.MessageContractAttribute(WrapperName="GenerateReport", WrapperNamespace="urn:microsoft-dynamics-schemas/codeunit/ReportWebService", IsWrapped=true)]
+    public partial class GenerateReport
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit", Order=0)]
-        public string actionName;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ReportWebService", Order=0)]
+        public int reportNo;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit", Order=1)]
-        public string actionParameters;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ReportWebService", Order=1)]
+        public string parameters;
         
-        public Execute()
+        public GenerateReport()
         {
         }
         
-        public Execute(string actionName, string actionParameters)
+        public GenerateReport(int reportNo, string parameters)
         {
-            this.actionName = actionName;
-            this.actionParameters = actionParameters;
+            this.reportNo = reportNo;
+            this.parameters = parameters;
         }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="Execute_Result", WrapperNamespace="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit", IsWrapped=true)]
-    public partial class Execute_Result
+    [System.ServiceModel.MessageContractAttribute(WrapperName="GenerateReport_Result", WrapperNamespace="urn:microsoft-dynamics-schemas/codeunit/ReportWebService", IsWrapped=true)]
+    public partial class GenerateReport_Result
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ExecuteCodeUnit", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:microsoft-dynamics-schemas/codeunit/ReportWebService", Order=0)]
         public string return_value;
         
-        public Execute_Result()
+        public GenerateReport_Result()
         {
         }
         
-        public Execute_Result(string return_value)
+        public GenerateReport_Result(string return_value)
         {
             this.return_value = return_value;
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
-    public interface ExecuteCodeUnit_PortChannel : ServiceReference1.ExecuteCodeUnit_Port, System.ServiceModel.IClientChannel
+    public interface ReportWebService_PortChannel : ReportWebServiceForLocalBC.ReportWebService_Port, System.ServiceModel.IClientChannel
     {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
-    public partial class ExecuteCodeUnit_PortClient : System.ServiceModel.ClientBase<ServiceReference1.ExecuteCodeUnit_Port>, ServiceReference1.ExecuteCodeUnit_Port
+    public partial class ReportWebService_PortClient : System.ServiceModel.ClientBase<ReportWebServiceForLocalBC.ReportWebService_Port>, ReportWebServiceForLocalBC.ReportWebService_Port
     {
         
         /// <summary>
@@ -81,51 +81,51 @@ namespace ServiceReference1
         /// <param name="clientCredentials">The client credentials</param>
         static partial void ConfigureEndpoint(System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Description.ClientCredentials clientCredentials);
         
-        public ExecuteCodeUnit_PortClient() : 
-                base(ExecuteCodeUnit_PortClient.GetDefaultBinding(), ExecuteCodeUnit_PortClient.GetDefaultEndpointAddress())
+        public ReportWebService_PortClient() : 
+                base(ReportWebService_PortClient.GetDefaultBinding(), ReportWebService_PortClient.GetDefaultEndpointAddress())
         {
-            this.Endpoint.Name = EndpointConfiguration.ExecuteCodeUnit_Port.ToString();
+            this.Endpoint.Name = EndpointConfiguration.ReportWebService_Port.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public ExecuteCodeUnit_PortClient(EndpointConfiguration endpointConfiguration) : 
-                base(ExecuteCodeUnit_PortClient.GetBindingForEndpoint(endpointConfiguration), ExecuteCodeUnit_PortClient.GetEndpointAddress(endpointConfiguration))
-        {
-            this.Endpoint.Name = endpointConfiguration.ToString();
-            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
-        }
-        
-        public ExecuteCodeUnit_PortClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
-                base(ExecuteCodeUnit_PortClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
+        public ReportWebService_PortClient(EndpointConfiguration endpointConfiguration) : 
+                base(ReportWebService_PortClient.GetBindingForEndpoint(endpointConfiguration), ReportWebService_PortClient.GetEndpointAddress(endpointConfiguration))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public ExecuteCodeUnit_PortClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(ExecuteCodeUnit_PortClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        public ReportWebService_PortClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
+                base(ReportWebService_PortClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public ExecuteCodeUnit_PortClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public ReportWebService_PortClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(ReportWebService_PortClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        {
+            this.Endpoint.Name = endpointConfiguration.ToString();
+            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
+        }
+        
+        public ReportWebService_PortClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress)
         {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<ServiceReference1.Execute_Result> ServiceReference1.ExecuteCodeUnit_Port.ExecuteAsync(ServiceReference1.Execute request)
+        System.Threading.Tasks.Task<ReportWebServiceForLocalBC.GenerateReport_Result> ReportWebServiceForLocalBC.ReportWebService_Port.GenerateReportAsync(ReportWebServiceForLocalBC.GenerateReport request)
         {
-            return base.Channel.ExecuteAsync(request);
+            return base.Channel.GenerateReportAsync(request);
         }
         
-        public System.Threading.Tasks.Task<ServiceReference1.Execute_Result> ExecuteAsync(string actionName, string actionParameters)
+        public System.Threading.Tasks.Task<ReportWebServiceForLocalBC.GenerateReport_Result> GenerateReportAsync(int reportNo, string parameters)
         {
-            ServiceReference1.Execute inValue = new ServiceReference1.Execute();
-            inValue.actionName = actionName;
-            inValue.actionParameters = actionParameters;
-            return ((ServiceReference1.ExecuteCodeUnit_Port)(this)).ExecuteAsync(inValue);
+            ReportWebServiceForLocalBC.GenerateReport inValue = new ReportWebServiceForLocalBC.GenerateReport();
+            inValue.reportNo = reportNo;
+            inValue.parameters = parameters;
+            return ((ReportWebServiceForLocalBC.ReportWebService_Port)(this)).GenerateReportAsync(inValue);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -140,7 +140,7 @@ namespace ServiceReference1
         
         private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
-            if ((endpointConfiguration == EndpointConfiguration.ExecuteCodeUnit_Port))
+            if ((endpointConfiguration == EndpointConfiguration.ReportWebService_Port))
             {
                 System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
                 result.MaxBufferSize = int.MaxValue;
@@ -154,27 +154,27 @@ namespace ServiceReference1
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
         {
-            if ((endpointConfiguration == EndpointConfiguration.ExecuteCodeUnit_Port))
+            if ((endpointConfiguration == EndpointConfiguration.ReportWebService_Port))
             {
-                return new System.ServiceModel.EndpointAddress("http://win-nem95r88i3f:7047/ERPDEVNAV110/WS/APSCL/Codeunit/ExecuteCodeUnit");
+                return new System.ServiceModel.EndpointAddress("http://win-2ajr95f2ai3:7047/ERPDEVBC140/WS/APSCL/Codeunit/ReportWebService");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
         
         private static System.ServiceModel.Channels.Binding GetDefaultBinding()
         {
-            return ExecuteCodeUnit_PortClient.GetBindingForEndpoint(EndpointConfiguration.ExecuteCodeUnit_Port);
+            return ReportWebService_PortClient.GetBindingForEndpoint(EndpointConfiguration.ReportWebService_Port);
         }
         
         private static System.ServiceModel.EndpointAddress GetDefaultEndpointAddress()
         {
-            return ExecuteCodeUnit_PortClient.GetEndpointAddress(EndpointConfiguration.ExecuteCodeUnit_Port);
+            return ReportWebService_PortClient.GetEndpointAddress(EndpointConfiguration.ReportWebService_Port);
         }
         
         public enum EndpointConfiguration
         {
             
-            ExecuteCodeUnit_Port,
+            ReportWebService_Port,
         }
     }
 }

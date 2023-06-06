@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\AhasanDrive\\My Drive\\SOAPServiceConsole\\SOAPServiceConsole.csproj": {}
+    "D:\\Software\\SOAP Service DotNet Core\\SOAPServiceConsole\\SOAPServiceConsole.csproj": {}
   },
   "projects": {
-    "E:\\AhasanDrive\\My Drive\\SOAPServiceConsole\\SOAPServiceConsole.csproj": {
+    "D:\\Software\\SOAP Service DotNet Core\\SOAPServiceConsole\\SOAPServiceConsole.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\AhasanDrive\\My Drive\\SOAPServiceConsole\\SOAPServiceConsole.csproj",
+        "projectUniqueName": "D:\\Software\\SOAP Service DotNet Core\\SOAPServiceConsole\\SOAPServiceConsole.csproj",
         "projectName": "SOAPServiceConsole",
-        "projectPath": "E:\\AhasanDrive\\My Drive\\SOAPServiceConsole\\SOAPServiceConsole.csproj",
+        "projectPath": "D:\\Software\\SOAP Service DotNet Core\\SOAPServiceConsole\\SOAPServiceConsole.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "E:\\AhasanDrive\\My Drive\\SOAPServiceConsole\\obj\\",
+        "outputPath": "D:\\Software\\SOAP Service DotNet Core\\SOAPServiceConsole\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
